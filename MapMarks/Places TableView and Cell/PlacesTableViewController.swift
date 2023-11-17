@@ -50,27 +50,30 @@ class PlacesTableViewController: UIViewController {
                 self.placesIdArray.removeAll()
                 self.placesNamesArray.removeAll()
                 self.placesTypesArray.removeAll()
-//                self.placeImageArray.removeAll()
+                self.placeImageArray.removeAll()
                 
                 for object in objects {
                     if let placeName = object.object(forKey: "name") as? String {
                         if let placesType = object.object(forKey: "type") as? String {
                             if let placesId = object.objectId {
-                                self.placesIdArray.append(placesId)
-                                self.placesNamesArray.append(placeName)
-                                self.placesTypesArray.append(placesType)
-//                                if let placesImage = object.object(forKey: "image") as? PFFileObject {
-//                                    placesImage.getDataInBackground { data, error in
-//                                        if error == nil {
-//                                            if data != nil {
-//                                                let image = UIImage(data: data!)
-//                                                self.placeImageArray.append(image!)
-//
-//                                            }
-//
-//                                        }
-//                                    }
-//                                }
+                                if let placesImage = object.object(forKey: "image") as? PFFileObject {
+                                    placesImage.getDataInBackground { data, error in
+                                        if error == nil {
+                                            if data != nil {
+                                                let image = UIImage(data: data!)
+                                                self.placeImageArray.append(image!)
+                                                self.placesIdArray.append(placesId)
+                                                self.placesNamesArray.append(placeName)
+                                                self.placesTypesArray.append(placesType)
+                                                
+                                                DispatchQueue.main.async {
+                                                    self.tableView.reloadData()
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
 
                             }
                         }
@@ -123,7 +126,7 @@ extension PlacesTableViewController: UITableViewDelegate, UITableViewDataSource 
         
         cell.placeName.text = placesNamesArray[indexPath.row]
         cell.placeType.text = placesTypesArray[indexPath.row]
-//        cell.placeImage.image = placeImageArray[indexPath.row]
+        cell.placeImage.image = placeImageArray[indexPath.row]
         
         return cell
     }
@@ -134,7 +137,7 @@ extension PlacesTableViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return 75
     }
     
     

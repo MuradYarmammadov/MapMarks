@@ -1,0 +1,6 @@
+framework module Pods_MapMarks {
+  umbrella header "Pods-MapMarks-umbrella.h"
+
+  export *
+  module * { export * }
+}
